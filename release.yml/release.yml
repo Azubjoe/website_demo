@@ -1,0 +1,28 @@
+# Release evidence
+release:
+  stage: release
+  needs: ["terraform:deploy"]
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - echo "Creating release with deployment evidence..."
+  release:
+    name: "Terraform Deployment ${CI_COMMIT_SHORT_SHA}"
+    description: |
+      ## Terraform Execution Evidence
+      **Plan Output:**  
+      See [${TF_PLAN_TEXT}](${CI_JOB_URL}/artifacts/file/${TF_ROOT}/${TF_PLAN_TEXT})
+      
+      **Apply Logs:**  
+      See [tf_apply.log](${CI_JOB_URL}/artifacts/file/${TF_ROOT}/tf_apply.log)
+    tag_name: "deploy-${CI_COMMIT_SHORT_SHA}"
+    assets:
+      links:
+        - name: "Terraform Plan"
+          url: "${CI_JOB_URL}/artifacts/file/${TF_ROOT}/${TF_PLAN_TEXT}"
+          link_type: "other"
+        - name: "Apply Logs"
+          url: "${CI_JOB_URL}/artifacts/file/${TF_ROOT}/tf_apply.log"
+          link_type: "other"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success
