@@ -13,7 +13,7 @@ systemctl enable crond
 systemctl start crond
 
 # Define repo and web directory
-REPO_URL="https://github.com/samuelcj/website_demo.git"
+REPO_URL="https://github.com/Azubjoe/website_demo.git" 
 WEB_DIR="/var/www/html"
 
 # Clone the repo if not already present
